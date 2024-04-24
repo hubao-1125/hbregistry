@@ -1,0 +1,6 @@
+spring:
+    application:
+        name: hbregistry
+
+server:
+    port: 8484
