@@ -1,5 +1,6 @@
 package io.github.hubao.hbregistry;
 
+import io.github.hubao.hbregistry.cluster.Cluster;
 import io.github.hubao.hbregistry.health.HbHealthChecker;
 import io.github.hubao.hbregistry.health.HealthChecker;
 import io.github.hubao.hbregistry.service.HbRegistryService;
@@ -23,8 +24,13 @@ public class HbRegistryConfig {
         return new HbRegistryService();
     }
 
-    @Bean(initMethod = "start", destroyMethod = "")
-    public HealthChecker hbHealthChecker(@Autowired RegistryService registryService) {
-        return new HbHealthChecker(registryService);
+//    @Bean(initMethod = "start", destroyMethod = "")
+//    public HealthChecker hbHealthChecker(@Autowired RegistryService registryService) {
+//        return new HbHealthChecker(registryService);
+//    }
+
+    @Bean(initMethod = "init")
+    public Cluster cluster(@Autowired HbRegistryConfigProperties hbRegistryConfigProperties) {
+        return new Cluster(hbRegistryConfigProperties);
     }
 }

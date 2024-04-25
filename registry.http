@@ -27,3 +27,30 @@ Content-Type: application/json
   "port": 8081,
   "scheme": "http"
 }
+
+
+### renew实例
+POST http://localhost:8484/renew?service=io.github.hubao.hbrpc.demo.api.UserService
+Content-Type: application/json
+
+{
+  "context": "hbrpc",
+  "host": "127.0.0.1",
+  "port": 8081,
+  "scheme": "http"
+}
+
+### info
+GET http://localhost:8484/info
+
+### cluster
+GET http://localhost:8484/cluster
+
+### info8485
+GET http://localhost:8485/info
+
+### info8486
+GET http://localhost:8486/info
+
+### sl 85
+GET http://localhost:8485/sl

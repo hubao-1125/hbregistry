@@ -1,6 +1,8 @@
 package io.github.hubao.hbregistry;
 
+import io.github.hubao.hbregistry.cluster.Cluster;
 import io.github.hubao.hbregistry.model.InstanceMeta;
+import io.github.hubao.hbregistry.model.Server;
 import io.github.hubao.hbregistry.service.RegistryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class HbRegistryController {
 
     @Autowired
     RegistryService registryService;
+
+    @Autowired
+    Cluster cluster;
 
 
     @RequestMapping("/reg")
@@ -66,5 +71,31 @@ public class HbRegistryController {
     public Map<String, Long> versions(@RequestParam String services) {
         log.info(" ====> versions services:{}", services);
         return registryService.versions(services.split(","));
+    }
+
+
+    @RequestMapping("/info")
+    public Server info() {
+        log.info(" ====> info: {}", cluster.self());
+        return cluster.self();
+    }
+
+    @RequestMapping("/cluster")
+    public List<Server> cluster() {
+        log.info(" ====> cluster: {}", cluster.getServers());
+        return cluster.getServers();
+    }
+
+    @RequestMapping("/leader")
+    public Server leader() {
+        log.info(" ====> leader: {}", cluster.leader());
+        return cluster.leader();
+    }
+
+    @RequestMapping("/sl")
+    public Server sl() {
+        cluster.self().setLeader(true);
+        log.info(" ====> sl: {}", cluster.self());
+        return cluster.self();
     }
 }

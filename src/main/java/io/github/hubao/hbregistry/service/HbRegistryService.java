@@ -42,6 +42,7 @@ public class HbRegistryService implements RegistryService {
         REGISTRY.add(service, instance);
         instance.setStatus(true);
         renew(instance, service);
+        VERSIONS.put(service, VERSION.incrementAndGet());
         return instance;
     }
 
@@ -56,6 +57,7 @@ public class HbRegistryService implements RegistryService {
         metas.removeIf(m -> m.equals(instance));
         instance.setStatus(false);
         renew(instance, service);
+        VERSIONS.put(service, VERSION.incrementAndGet());
         return instance;
     }
 
