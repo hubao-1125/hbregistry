@@ -1,5 +1,6 @@
 package io.github.hubao.hbregistry.service;
 
+import io.github.hubao.hbregistry.cluster.Snapshot;
 import io.github.hubao.hbregistry.model.InstanceMeta;
 
 import java.util.Arrays;
@@ -26,4 +27,5 @@ public interface RegistryService {
     Long version(String service);
 
     Map<String, Long> versions(String... services);
+
 }

@@ -1,8 +1,10 @@
 package io.github.hubao.hbregistry;
 
 import io.github.hubao.hbregistry.cluster.Cluster;
+import io.github.hubao.hbregistry.cluster.Snapshot;
 import io.github.hubao.hbregistry.model.InstanceMeta;
-import io.github.hubao.hbregistry.model.Server;
+import io.github.hubao.hbregistry.cluster.Server;
+import io.github.hubao.hbregistry.service.HbRegistryService;
 import io.github.hubao.hbregistry.service.RegistryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +36,20 @@ public class HbRegistryController {
     @RequestMapping("/reg")
     public InstanceMeta register(@RequestParam String service, @RequestBody InstanceMeta instance) {
         log.info(" ====> register service:{}, instance:{}", service, instance);
+        checkLeader();
         return registryService.register(service, instance);
+    }
+
+    private void checkLeader() {
+        if (!cluster.self().isLeader()) {
+            throw new RuntimeException("current server is not a leader, the leader is {}" + cluster.leader().getUrl());
+        }
     }
 
     @RequestMapping("/unreg")
     public InstanceMeta unregister(@RequestParam String service, @RequestBody InstanceMeta instance) {
         log.info(" ====> unregister service:{}, instance:{}", service, instance);
+        checkLeader();
         return registryService.unregister(service, instance);
     }
 
@@ -52,12 +62,14 @@ public class HbRegistryController {
     @RequestMapping("/renew")
     public long renew(@RequestBody InstanceMeta instance, @RequestParam String service) {
         log.info(" ====> renew instance:{}, service:{}", instance, service);
+        checkLeader();
         return registryService.renew(instance, service);
     }
 
     @RequestMapping("/renews")
     public long renews(@RequestBody InstanceMeta instance, @RequestParam String services) {
         log.info(" ====> renew instance:{}, services:{}", instance, services);
+        checkLeader();
         return registryService.renew(instance, services.split(","));
     }
 
@@ -97,5 +109,10 @@ public class HbRegistryController {
         cluster.self().setLeader(true);
         log.info(" ====> sl: {}", cluster.self());
         return cluster.self();
+    }
+
+    @RequestMapping("/snapshot")
+    public Snapshot snapshot() {
+        return HbRegistryService.snapshot();
     }
 }

@@ -1,4 +1,4 @@
-package io.github.hubao.hbregistry.model;
+package io.github.hubao.hbregistry.cluster;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
