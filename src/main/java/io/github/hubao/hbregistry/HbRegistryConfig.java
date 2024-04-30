@@ -24,10 +24,10 @@ public class HbRegistryConfig {
         return new HbRegistryService();
     }
 
-//    @Bean(initMethod = "start", destroyMethod = "")
-//    public HealthChecker hbHealthChecker(@Autowired RegistryService registryService) {
-//        return new HbHealthChecker(registryService);
-//    }
+    @Bean(initMethod = "start", destroyMethod = "stop")
+    public HealthChecker hbHealthChecker(@Autowired RegistryService registryService) {
+        return new HbHealthChecker(registryService);
+    }
 
     @Bean(initMethod = "init")
     public Cluster cluster(@Autowired HbRegistryConfigProperties hbRegistryConfigProperties) {
